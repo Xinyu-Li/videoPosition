@@ -72,8 +72,8 @@ def bottom_foot_rect_area(point_list):
     b = point_list[2][1] - point_list[0][1]
     return a * b
 
-def get_rect_data():
-    with open("rect_result.txt", "r", encoding="utf8") as f:
+def get_rect_data(filename):
+    with open(filename, "r", encoding="utf8") as f:
         contents = f.read().split("\n")
     return contents
 

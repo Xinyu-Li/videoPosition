@@ -17,8 +17,9 @@ key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 pat
 
 def start_processing():
     result_temporal_string = "time;;;bed1;;;bed2;;;bed3;;;bed4;;;bed1_lp;;;bed2_lp;;;bed3_lp;;;bed4_lp;;;eq_left;;;ecg;;;meds;;;phone;;;people_together\n"
-    cap = cv2.VideoCapture("C:\\develop\\videos\\processed_141_h264.mp4")
-    contents = get_rect_data()
+    cap = cv2.VideoCapture("C:\\develop\\videos\\processed_144_h264.mp4")
+    # contents = get_rect_data("rect_result.txt")
+    contents = get_rect_data("process_tracking_box/tracking_box_data/track_144_processed.txt")
     frame_count = 0
 
     wait_time = 21
@@ -38,7 +39,8 @@ def start_processing():
 
             """--------------------------------画出每个rect的底部中点-------------------------"""
             line = contents[frame_count]  # 获取每帧矩形坐标
-            rect_coordinates_list = eval(line.split(";;;")[1])
+            # rect_coordinates_list = eval(line.split(";;;")[1])  # only for 141
+            rect_coordinates_list = [[item[1], item[2], item[3], item[4]] for item in eval(line)]
             bed1_laptop_count_rect = 0
             bed2_laptop_count_rect = 0
             bed3_laptop_count_rect = 0

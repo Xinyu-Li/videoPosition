@@ -3,3 +3,4 @@ __pycache__/
 **/__pycache__/
 *.csv
 *.xlsx
+process_tracking_box/tracking_box_data
