@@ -100,5 +100,34 @@ def calculate_rect_size():
     with open("rect_size.txt", "w", encoding="utf8") as f:
         f.write(result_str)
 
-calculate_rect_size()
+# calculate_rect_size()
 
+def test_nested_loop():
+    my_list = [0,1,2,3,4,5]
+    for i in range(len(my_list) - 1):
+        for j in range(i + 1, len(my_list)):
+            print(my_list[i], "----", my_list[j])
+        print("---------------------")
+
+def test_flatten_list():
+    my_list = [(1, 2), (0, 1), (2, 3)]
+    result = np.array(my_list).flatten().tolist()
+    print(result)
+
+# test_flatten_list()
+
+def reformat_data():
+    with open("temporal_data.csv", "r", encoding="utf8") as f:
+        contents = f.read().split("\n")
+    result = ""
+    for line in contents:
+        if line:
+            eles = line.split(";;;")
+            result += (eles[0] + "," + eles[1] + "," + eles[2] + "," + eles[3] + "," \
+                      + eles[4] + "," + eles[5] + "," + eles[6] + "," + eles[7] + "," \
+                      + eles[8] + "," + eles[9] + "," + eles[10] + "," + eles[11] + "," \
+                      + eles[12] + "\n")
+    with open("temporal_data2.csv", "w", encoding="utf8") as f2:
+        f2.write(result)
+
+reformat_data()
