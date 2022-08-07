@@ -1,3 +1,5 @@
+import os
+
 import cv2
 import numpy as np
 from draw_main_location import draw_main_locations, draw_main_areas
@@ -15,11 +17,11 @@ key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 pat
                       "equip left", "equip right"]
 
 
-def start_processing():
+def start_processing(video_path, rect_path, output_path):
     result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_left,eq_right,ecg,meds,phone\n"
-    cap = cv2.VideoCapture("C:\\develop\\videos\\processed_144_h264.mp4")
+    cap = cv2.VideoCapture(video_path)
     # contents = get_rect_data("rect_result.txt")
-    contents = get_rect_data("process_tracking_box/tracking_box_data/track_144_processed.txt")
+    contents = get_rect_data(rect_path)
     frame_count = 0
 
     wait_time = 21
@@ -231,9 +233,16 @@ def start_processing():
 
     cv2.destroyAllWindows()
     cap.release()
-    with open("temporal_data_based_points.csv", "w", encoding="utf8") as f:
+    with open(output_path, "w", encoding="utf8") as f:
         f.write(result_temporal_string)
 
 
 if __name__ == "__main__":
-    start_processing()
+    for i in range(141, 220):
+        video_path = "C:\\develop\\videos\\processed_videos\\processed_" + str(i) + "_h264.mp4"
+        rect_path = "process_tracking_box/tracking_box_data/track_" + str(i) + "_processed.txt"
+        output_path = "process_tracking_box/output_data/temporal_data_based_points_" + str(i) + ".csv"
+        if os.path.exists(video_path):
+            start_processing(video_path, rect_path, output_path)
+        else:
+            print("processed_" + str(i) + "_h264.mp4 not exist")

@@ -117,7 +117,7 @@ def test_flatten_list():
 # test_flatten_list()
 
 def reformat_data():
-    with open("temporal_data.csv", "r", encoding="utf8") as f:
+    with open("process_tracking_box/output_data/temporal_data.csv", "r", encoding="utf8") as f:
         contents = f.read().split("\n")
     result = ""
     for line in contents:
@@ -127,7 +127,7 @@ def reformat_data():
                       + eles[4] + "," + eles[5] + "," + eles[6] + "," + eles[7] + "," \
                       + eles[8] + "," + eles[9] + "," + eles[10] + "," + eles[11] + "," \
                       + eles[12] + "\n")
-    with open("temporal_data2.csv", "w", encoding="utf8") as f2:
+    with open("process_tracking_box/output_data/temporal_data2.csv", "w", encoding="utf8") as f2:
         f2.write(result)
 
 reformat_data()

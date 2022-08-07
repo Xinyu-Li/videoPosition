@@ -183,7 +183,8 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     """--------------------------------ECG area------------------------------------
 
     """
-    bed3_and_ecg_pts_list = [(582, 493), (610, 440), (720, 447), (750, 500)]
+    # bed3_and_ecg_pts_list = [(582, 493), (610, 440), (720, 447), (750, 500)]
+    bed3_and_ecg_pts_list = [(638, 417), (710, 417), (717, 437), (634, 417)]
     bed3_and_ecg_pts = np.array(bed3_and_ecg_pts_list, np.int32)
     cv2.polylines(frame, [bed3_and_ecg_pts], True, (0, 255, 255))
 
@@ -193,7 +194,7 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     cv2.line(frame, (690, 415), (698, 513), (255, 118, 72))
 
     """----------------------------Meds area------------------------------"""
-    meds_pts_list = [(807, 437), (705, 435), (698, 415), (785, 415)]
+    meds_pts_list = [(807, 437), (717, 437), (710, 417), (785, 415)]
     meds_pts = np.array(meds_pts_list, np.int32)
     cv2.polylines(frame, [meds_pts], False, (0, 255, 255))
 
