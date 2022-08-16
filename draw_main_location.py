@@ -16,11 +16,11 @@ def draw_main_locations(frame):
     cv2.putText(frame, "phone", (1100, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
     cv2.circle(frame, (1120, 360), 5, color=[0, 255, 255], thickness=-1)
     # ECG, 6542, 5988
-    cv2.putText(frame, "ECG", (671, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-    cv2.circle(frame, (671, 365), 5, color=[0, 255, 255], thickness=-1)
+    # cv2.putText(frame, "ECG", (671, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+    # cv2.circle(frame, (671, 365), 5, color=[0, 255, 255], thickness=-1)
     # Meds, 6442, 5018
-    cv2.putText(frame, "Meds", (720, 340), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-    cv2.circle(frame, (740, 380), 5, color=[0, 255, 255], thickness=-1)
+    # cv2.putText(frame, "Meds", (720, 340), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+    # cv2.circle(frame, (740, 380), 5, color=[0, 255, 255], thickness=-1)
 
     """---------------------------------------------------------------------------------------------------"""
     # B1 laptop, 4564, 7589
@@ -81,11 +81,11 @@ def draw_main_locations(frame):
     cv2.putText(frame, "B4 pa", (850, 345), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
     cv2.circle(frame, (870, 365), 5, color=[255, 187, 255], thickness=-1)
 
-    # Equip left, 1155, 292
-    cv2.putText(frame, "Eq left", (410, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
+    # Equip right, 1155, 292
+    cv2.putText(frame, "Eq right", (410, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
     cv2.circle(frame, (410, 350), 5, color=[255, 255, 50], thickness=-1)
-    # Equip right, 5819, 292
-    cv2.putText(frame, "Eq right", (130, 365), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
+    # Equip left, 5819, 292
+    cv2.putText(frame, "Eq left", (130, 365), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
     cv2.circle(frame, (130, 385), 5, color=[255, 255, 50], thickness=-1)
 
     """---------------------------------------------------------------------------"""
@@ -153,7 +153,7 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     #
     # else:
 
-    """---------------------------Bed 2 or Eq right area--------------------------
+    """---------------------------Bed 2 or Eq left area--------------------------
     use parabola and x < 330 to check
     """
 
@@ -167,12 +167,12 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     cv2.polylines(frame, [bed2_laptop_pts], True, (240, 32, 160))
 
     """-------------------------Bed 3 with family member area---------------------
-    use parabola and bed3_eq_left_line to check
+    use parabola and bed3_eq_right_line to check
     """
-    bed3_eq_left_line = [(508, 410), (407, 476)]
+    bed3_eq_right_line = [(508, 410), (407, 476)]
     cv2.line(frame, (508, 410), (407, 476), (255, 118, 72))
-    """-------------------------------Eq left area--------------------------------
-    use parabola and bed3_eq_left_line to check
+    """-------------------------------Eq right area--------------------------------
+    use parabola and bed3_eq_right_line to check
     """
 
     """------------------------------Bed 3 laptop area----------------------------"""
@@ -184,9 +184,9 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
 
     """
     # bed3_and_ecg_pts_list = [(582, 493), (610, 440), (720, 447), (750, 500)]
-    bed3_and_ecg_pts_list = [(638, 417), (710, 417), (717, 437), (634, 417)]
-    bed3_and_ecg_pts = np.array(bed3_and_ecg_pts_list, np.int32)
-    cv2.polylines(frame, [bed3_and_ecg_pts], True, (0, 255, 255))
+    # bed3_and_ecg_pts_list = [(638, 417), (710, 417), (717, 437), (634, 417)]
+    # bed3_and_ecg_pts = np.array(bed3_and_ecg_pts_list, np.int32)
+    # cv2.polylines(frame, [bed3_and_ecg_pts], True, (0, 255, 255))
 
     """-----------------------------Bed 3 area close to Meds and ECG------------------------------------"""
     bed3_patient_line = [(690, 415), (698, 513)]
@@ -194,9 +194,9 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     cv2.line(frame, (690, 415), (698, 513), (255, 118, 72))
 
     """----------------------------Meds area------------------------------"""
-    meds_pts_list = [(807, 437), (717, 437), (710, 417), (785, 415)]
-    meds_pts = np.array(meds_pts_list, np.int32)
-    cv2.polylines(frame, [meds_pts], False, (0, 255, 255))
+    # meds_pts_list = [(807, 437), (717, 437), (710, 417), (785, 415)]
+    # meds_pts = np.array(meds_pts_list, np.int32)
+    # cv2.polylines(frame, [meds_pts], False, (0, 255, 255))
 
     """-------------------------------Bed 4 area----------------------------------
     use parabola line and bed4 line to check
@@ -218,5 +218,5 @@ def draw_main_areas(frame, parabola_pts_list, parabola_coefficient):
     cv2.polylines(frame, [phone_pts], True, (0, 255, 255))
 
     return bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, \
-           bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, \
-           bed1_bed2_middle_line, bed3_eq_left_line, bed3_patient_line, bed4_patient_line
+            phone_pts_list, \
+           bed1_bed2_middle_line, bed3_eq_right_line, bed3_patient_line, bed4_patient_line # bed3_and_ecg_pts_list, meds_pts_list,

@@ -71,7 +71,7 @@ if __name__ == '__main__':
         return _sort_vertices_anti_clockwise_and_remove_duplicates(
             [[np.cos(x), np.sin(x)] for x in np.random.rand(random.randint(3, 6)) * 2 * np.pi])
 
-    print([[np.cos(x), np.sin(x)] for x in np.random.rand(random.randint(3, 6)) * 2 * np.pi])
+    # print([[np.cos(x), np.sin(x)] for x in np.random.rand(random.randint(3, 6)) * 2 * np.pi])
     # def plot_polygon(polygon):
     #     if polygon:
     #         _polygon = list(polygon)
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     #         plt.plot(x, y, 'o-')
     #         plt.fill(x, y, alpha=0.25)
 
-    print(generate_random_convex_polygon())
+    # print(generate_random_convex_polygon())
     polygon1 = generate_random_convex_polygon()
     polygon2 = generate_random_convex_polygon()
     polygon3 = intersect(polygon1, polygon2)

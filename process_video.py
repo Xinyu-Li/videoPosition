@@ -10,23 +10,24 @@ from util_functions import *
 # offset = 10
 
 
-key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 patient",
-                      "b2 laptop", "b2 monitor", "b2 patient", "b2 oxygen",
-                      "b3 laptop", "b3 monitor", "b3 patient", "b3 oxygen",
-                      "b4 laptop", "b4 monitor", "b4 patient", "b4 oxygen",
-                      "equip left", "equip right"]
+# key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 patient",
+#                       "b2 laptop", "b2 monitor", "b2 patient", "b2 oxygen",
+#                       "b3 laptop", "b3 monitor", "b3 patient", "b3 oxygen",
+#                       "b4 laptop", "b4 monitor", "b4 patient", "b4 oxygen",
+#                       "equip right", "equip left"]
 
 
 def start_processing(video_path, rect_path, output_path):
 
-    result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_left,ecg,meds,phone\n" # ,people_together
+    # result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,ecg,meds,phone\n" # ,people_together
+    result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,phone\n"  # ,people_together
 
     cap = cv2.VideoCapture(video_path)
     # contents = get_rect_data("rect_result.txt")
     contents = get_rect_data(rect_path)
     frame_count = 0
 
-    wait_time = 21
+    wait_time = 1
 
     area_intersection_ratio = 0.3
 
@@ -38,11 +39,17 @@ def start_processing(video_path, rect_path, output_path):
 
         if ret:
             draw_main_locations(frame)
-            bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_left_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
+            # bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_right_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
+            #     frame, parabola_pts_list, parabola_coefficient)
+            bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_right_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
                 frame, parabola_pts_list, parabola_coefficient)
 
             """--------------------------------画出每个rect的底部中点-------------------------"""
-            line = contents[frame_count]  # 获取每帧矩形坐标
+            try:
+                line = contents[frame_count]  # 获取每帧矩形坐标
+            except:
+                print("frame count different from rect count")
+                break
             # rect_coordinates_list = eval(line.split(";;;")[1])  # only for 141
             rect_coordinates_list = [[item[1], item[2], item[3], item[4]] for item in eval(line)]
             bed1_laptop_count_rect = 0
@@ -55,7 +62,7 @@ def start_processing(video_path, rect_path, output_path):
             bed3_patient_count_rect = 0
             bed4_patient_count_rect = 0
 
-            eq_left_count_rect = 0
+            eq_right_count_rect = 0
 
             ecg_count_rect = 0
             meds_count_rect = 0
@@ -82,8 +89,8 @@ def start_processing(video_path, rect_path, output_path):
 
 
                 # print("------------------")
-                if frame_count != 0 and frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
-
+                # if frame_count != 0 and frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
+                if frame_count != 0:
                     """判断bed1 laptop"""
                     intersect_polygon_area_bed1_laptop_value = intersect_polygon_area(bottom_foot_rect_point_list, bed1_laptop_pts_list)
                     if intersect_polygon_area_bed1_laptop_value > bottom_foot_rect_area_value * area_intersection_ratio:
@@ -121,25 +128,25 @@ def start_processing(video_path, rect_path, output_path):
                         continue
 
                     """判断ecg"""
-                    intersect_polygon_area_ecg_value = intersect_polygon_area(bottom_foot_rect_point_list, bed3_and_ecg_pts_list)
-                    if intersect_polygon_area_ecg_value > bottom_foot_rect_area_value * area_intersection_ratio:
-                        cv2.putText(frame, "Near ECG", (450, 580), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
-                        ecg_count_rect += 1
-                        continue
+                    # intersect_polygon_area_ecg_value = intersect_polygon_area(bottom_foot_rect_point_list, bed3_and_ecg_pts_list)
+                    # if intersect_polygon_area_ecg_value > bottom_foot_rect_area_value * area_intersection_ratio:
+                    #     cv2.putText(frame, "Near ECG", (450, 580), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
+                    #     ecg_count_rect += 1
+                    #     continue
 
                     """判断meds"""
-                    intersect_polygon_area_meds_value = intersect_polygon_area(bottom_foot_rect_point_list, meds_pts_list)
-                    if intersect_polygon_area_meds_value > bottom_foot_rect_area_value * area_intersection_ratio:
-                        cv2.putText(frame, "Near meds", (450, 580), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
-                        meds_count_rect += 1
-                        continue
+                    # intersect_polygon_area_meds_value = intersect_polygon_area(bottom_foot_rect_point_list, meds_pts_list)
+                    # if intersect_polygon_area_meds_value > bottom_foot_rect_area_value * area_intersection_ratio:
+                    #     cv2.putText(frame, "Near meds", (450, 580), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
+                    #     meds_count_rect += 1
+                    #     continue
 
 
                     above_parabola_count_point = 0
                     below_parabola_count_point = 0
                     below_parabola_rect_point_list = []
                     above_parabola_rect_point_list = []
-                    print(bottom_foot_rect_point_list)
+                    # print(bottom_foot_rect_point_list)
                     for bottom_foot_rect_point in bottom_foot_rect_point_list:
                         result_position = check_point_location_to_parabola(bottom_foot_rect_point, parabola_coefficient)
                         # cv2.putText(frame, result_position + " parabola", (450, 580), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
@@ -235,7 +242,7 @@ def start_processing(video_path, rect_path, output_path):
                             else:
                                 if check_on_line_same_side(bottom_foot_rect_point_list[1], (410, 330), x1=516, y1=410, x2=442,
                                                            y2=483):  # 因为是长方形，如果第一个点在，则另一个点必在
-                                    eq_left_count_rect += 1
+                                    eq_right_count_rect += 1
                                 elif not check_on_line_same_side(bottom_foot_rect_point_list[1], (410, 330), x1=516, y1=410, x2=442,
                                                                  y2=483) and check_on_line_same_side(bottom_foot_rect_point_list[0], (410, 330),
                                                                                                      x1=516, y1=410, x2=442, y2=483):
@@ -254,17 +261,17 @@ def start_processing(video_path, rect_path, output_path):
                                     if intersect_polygon_close_bed3_area_value1 > intersect_polygon_close_bed3_area_value2:
                                         bed3_patient_count_rect += 1
                                     else:
-                                        eq_left_count_rect += 1
+                                        eq_right_count_rect += 1
                                 else:
                                     bed3_patient_count_rect += 1
                     else:  # 超过3个点 above
-                        print("has rect above:", above_parabola_rect_point_list)
-                        close_eq_left_count_point = 0
+                        # print("has rect above:", above_parabola_rect_point_list)
+                        close_eq_right_count_point = 0
                         close_bed3_count_point = 0
                         close_bed4_count_point = 0
 
-                        # "Eq left", (410, 330)
-                        # bed3_eq_left_line = [(x1=508, y1=410), (x2=407, y2=476)]
+                        # "Eq right", (410, 330)
+                        # bed3_eq_right_line = [(x1=508, y1=410), (x2=407, y2=476)]
                         # (410 - 407)  * (410 - 483) / (516 - 442) + 483 - 330 = 184.567567568 > 0
                         # "B3 pa", (580, 335)
                         # bed3_patient_line = [(x1=690, y1=415), (x2=698, y2=513)]
@@ -272,32 +279,32 @@ def start_processing(video_path, rect_path, output_path):
                         # "B4 pa", (850, 345)
                         for bottom_foot_rect_point in bottom_foot_rect_point_list:
                             if check_on_line_same_side(bottom_foot_rect_point, (410, 330), x1=508, y1=410, x2=407, y2=476):
-                                close_eq_left_count_point += 1
+                                close_eq_right_count_point += 1
                             elif check_on_line_same_side(bottom_foot_rect_point, (850, 345), x1=785, y1=415, x2=867, y2=495):
                                 close_bed4_count_point += 1
                             elif check_on_line_same_side(bottom_foot_rect_point, (580, 400), x1=508, y1=410, x2=407,
                                                          y2=476) and check_on_line_same_side(bottom_foot_rect_point, (580, 400), x1=690, y1=415,
                                                                                              x2=698, y2=513):
                                 close_bed3_count_point += 1
-                        print("close_eq_left_count_point:", close_eq_left_count_point)
-                        print("close_bed4_count_point:", close_bed4_count_point)
-                        print("close_bed3_count_point:", close_bed3_count_point)
-                        if close_eq_left_count_point >= 3:
-                            eq_left_count_rect += 1
+                        # print("close_eq_right_count_point:", close_eq_right_count_point)
+                        # print("close_bed4_count_point:", close_bed4_count_point)
+                        # print("close_bed3_count_point:", close_bed3_count_point)
+                        if close_eq_right_count_point >= 3:
+                            eq_right_count_rect += 1
                         elif close_bed4_count_point >= 2:
                             bed4_patient_count_rect += 1
                         elif close_bed3_count_point >= 3:
                             bed3_patient_count_rect += 1
-                        elif close_eq_left_count_point == 2:
+                        elif close_eq_right_count_point == 2:
                             temp_x2 = (bottom_foot_rect_point_list[0][1] - 476) * (508 - 407) / (410 - 476) + 407
                             temp_x3 = (bottom_foot_rect_point_list[3][1] - 476) * (508 - 407) / (410 - 476) + 407
-                            intersect_polygon_close_eq_left_area_value = intersect_polygon_area(bottom_foot_rect_point_list,
+                            intersect_polygon_close_eq_right_area_value = intersect_polygon_area(bottom_foot_rect_point_list,
                                                                                                 [bottom_foot_rect_point_list[0],
                                                                                                  (temp_x2, bottom_foot_rect_point_list[0][1]),
                                                                                                  (temp_x3, bottom_foot_rect_point_list[3][1]),
                                                                                                  bottom_foot_rect_point_list[3]])
-                            if intersect_polygon_close_eq_left_area_value > bottom_foot_rect_area_value * 0.5:
-                                eq_left_count_rect += 1  # 表明rect 超过一半 在eq left
+                            if intersect_polygon_close_eq_right_area_value > bottom_foot_rect_area_value * 0.5:
+                                eq_right_count_rect += 1  # 表明rect 超过一半 在eq right
                             else:
                                 bed3_patient_count_rect += 1  # 表明rect 超过一半 在bed 3
                         elif close_bed3_count_point == 2:
@@ -305,20 +312,21 @@ def start_processing(video_path, rect_path, output_path):
 
 
 
-            if frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
-                print("time:", frame_count // 40, "Near bed 1 laptop--------number_people", bed1_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 2 laptop--------number_people", bed2_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 3 laptop--------number_people", bed3_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 4 laptop--------number_people", bed4_laptop_count_rect)
-                print("time:", frame_count // 40, "Near phone---------------number_people", phone_count_rect)
-                print("time:", frame_count // 40, "Near ECG-----------------number_people", ecg_count_rect)
-                print("time:", frame_count // 40, "Near meds----------------number_people", meds_count_rect)
-
-                print("time:", frame_count // 40, "Near bed 1 patient-------number_people", bed1_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 2 patient-------number_people", bed2_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 3 patient-------number_people", bed3_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 4 patient-------number_people", bed4_patient_count_rect)
-                print("time:", frame_count // 40, "Near eq left-------------number_people", eq_left_count_rect)
+            # if frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
+            if frame_count != 0:
+                # print("time:", frame_count // 40, "Near bed 1 laptop--------number_people", bed1_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 2 laptop--------number_people", bed2_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 3 laptop--------number_people", bed3_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 4 laptop--------number_people", bed4_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near phone---------------number_people", phone_count_rect)
+                # print("time:", frame_count // 40, "Near ECG-----------------number_people", ecg_count_rect)
+                # print("time:", frame_count // 40, "Near meds----------------number_people", meds_count_rect)
+                #
+                # print("time:", frame_count // 40, "Near bed 1 patient-------number_people", bed1_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 2 patient-------number_people", bed2_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 3 patient-------number_people", bed3_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 4 patient-------number_people", bed4_patient_count_rect)
+                # print("time:", frame_count // 40, "Near eq right-------------number_people", eq_right_count_rect)
 
 
                 for i in range(len(rect_coordinates_list) - 1):
@@ -336,17 +344,27 @@ def start_processing(video_path, rect_path, output_path):
                             # print(i, j)
                             people_together_pair_list.append((i, j))
                 people_together_merge_result = merge_together_rect(people_together_pair_list)
-                print("people together: ", people_together_pair_list, "---merged:", people_together_merge_result)
-                print("------------------------------------------------------------------------------------------")
+                # print("people together: ", people_together_pair_list, "---merged:", people_together_merge_result)
+                # print("------------------------------------------------------------------------------------------")
 
-                # "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_left,ecg,meds,phone,people_together\n"
-                result_temporal_string += str(frame_count // 40) + ";;;" + \
-                                          str(bed1_patient_count_rect) + ";;;" + str(bed2_patient_count_rect) + ";;;" + \
-                                          str(bed3_patient_count_rect) + ";;;" + str(bed4_patient_count_rect) + ";;;" + \
-                                          str(bed1_laptop_count_rect) + ";;;" + str(bed2_laptop_count_rect) + ";;;" + \
-                                          str(bed3_laptop_count_rect) + ";;;" + str(bed4_laptop_count_rect) + ";;;" + \
-                                          str(eq_left_count_rect) + ";;;" + str(ecg_count_rect) + ";;;" + str(meds_count_rect) + ";;;" + \
-                                          str(phone_count_rect) + ";;;" + str(people_together_merge_result) + "\n"
+                # "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,ecg,meds,phone,people_together\n"
+                # result_temporal_string += str(frame_count // 40) + ";;;" + \
+                #                           str(bed1_patient_count_rect) + ";;;" + str(bed2_patient_count_rect) + ";;;" + \
+                #                           str(bed3_patient_count_rect) + ";;;" + str(bed4_patient_count_rect) + ";;;" + \
+                #                           str(bed1_laptop_count_rect) + ";;;" + str(bed2_laptop_count_rect) + ";;;" + \
+                #                           str(bed3_laptop_count_rect) + ";;;" + str(bed4_laptop_count_rect) + ";;;" + \
+                #                           str(eq_right_count_rect) + ";;;" + str(ecg_count_rect) + ";;;" + str(meds_count_rect) + ";;;" + \
+                #                           str(phone_count_rect) + ";;;" + str(people_together_merge_result) + "\n"
+
+                result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + \
+                                          str(bed2_patient_count_rect) + "," + \
+                                          str(bed3_patient_count_rect) + "," + str(bed4_patient_count_rect) + "," + \
+                                          str(bed1_laptop_count_rect) + "," + str(bed2_laptop_count_rect) + "," + \
+                                          str(bed3_laptop_count_rect) + "," + str(bed4_laptop_count_rect) + "," + \
+                                          str(eq_right_count_rect) + "," + \
+                                          str(phone_count_rect) + "\n"
+
+
                 # if point_in_region(bottom_rect_center_point, bed3_laptop_pts_list):
                 #     cv2.putText(frame, "Using bed 3 laptop", (450, 660), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
 
@@ -447,10 +465,11 @@ def start_processing(video_path, rect_path, output_path):
 
 if __name__ == "__main__":
     for i in range(141, 220):
-        video_path = "C:\\develop\\videos\\processed_videos\\processed_" + str(i) + "_h264.mp4"
+        video_path = "C:\\develop\\videos\\processed_1_frame_videos\\processed_1_frame_" + str(i) + ".mp4"
         rect_path = "process_tracking_box/tracking_box_data/track_" + str(i) + "_processed.txt"
-        output_path = "process_tracking_box/output_data/temporal_data_" + str(i) + ".csv"
+        output_path = "process_tracking_box/output_data/1_frame_temporal_data_" + str(i) + ".csv"
         if os.path.exists(video_path):
+            print("processing.......................", i)
             start_processing(video_path, rect_path, output_path)
         else:
-            print("processed_" + str(i) + "_h264.mp4 not exist")
+            print("processed_1_frame_" + str(i) + "_h264.mp4 not exist")

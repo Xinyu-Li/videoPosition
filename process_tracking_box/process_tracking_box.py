@@ -31,7 +31,7 @@ def process_tracking_files(rect_path, processed_rect_path):
 
 if __name__ == '__main__':
     # print("qerqerqerqer]])]"[:-2])
-    for i in range(141, 220):
+    for i in range(141, 219):
         rect_path = "tracking_box_data/track_" + str(i) + ".txt"
         processed_rect_path = "tracking_box_data/track_" + str(i) + "_processed.txt"
         if os.path.exists(rect_path):

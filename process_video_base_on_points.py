@@ -10,28 +10,30 @@ from util_functions import *
 # offset = 10
 
 
-key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 patient",
-                      "b2 laptop", "b2 monitor", "b2 patient", "b2 oxygen",
-                      "b3 laptop", "b3 monitor", "b3 patient", "b3 oxygen",
-                      "b4 laptop", "b4 monitor", "b4 patient", "b4 oxygen",
-                      "equip left", "equip right"]
+# key_positions_list = ["phone", "ECG", "Meds", "b1 laptop", "b1 monitor", "b1 patient",
+#                       "b2 laptop", "b2 monitor", "b2 patient", "b2 oxygen",
+#                       "b3 laptop", "b3 monitor", "b3 patient", "b3 oxygen",
+#                       "b4 laptop", "b4 monitor", "b4 patient", "b4 oxygen",
+#                       "equip right", "equip right"]
+
 
 
 def start_processing(video_path, rect_path, output_path):
-    result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_left,eq_right,ecg,meds,phone\n"
+    # result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,eq_right,ecg,meds,phone\n"
+    result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,eq_left,,phone\n"
     cap = cv2.VideoCapture(video_path)
     # contents = get_rect_data("rect_result.txt")
     contents = get_rect_data(rect_path)
     frame_count = 0
 
-    wait_time = 21
+    wait_time = 1
 
     target_waist_point_list_dict = {"b1_lp": [(965, 400), (942, 407)], "b1_pa": [(1120, 450), (950, 450), (1035, 424), (1240, 539), (1200, 445)],
                                     "b2_lp": [(420, 420), (402, 421)], "b2_pa": [(200, 470), (417, 464), (325, 431), (69, 453)],
                                     "b3_lp": [(565, 370), (574, 381)], "b3_pa": [(580, 345), (597, 394), (616, 361), (530, 392)],
                                     "b4_lp": [(920, 365), (938, 374)], "b4_pa": [(870, 365), (840, 379), (895, 401), (889, 369)],
-                                    "ecg": [(671, 365)], "meds": [(724, 415), (756, 442)],
-                                    "eq_left": [(399, 371), (435, 362)], "eq_right": [(119, 417), (167, 409)], "phone": [(1120, 360), (1120, 383)]}
+                                    # "ecg": [(671, 365)], "meds": [(724, 415), (756, 442)],
+                                    "eq_right": [(399, 371), (435, 362)], "eq_left": [(119, 417), (167, 409)], "phone": [(1120, 360), (1120, 383)]}
 
     target_head_point_list_dict = {"b3_mo": [(570, 310)], "b3_ox": [(635, 310)], "b4_mo": [(830, 315)], "b4_ox": [(880, 320)], "phone": [(1120, 360), (1120, 383)]}
 
@@ -41,11 +43,15 @@ def start_processing(video_path, rect_path, output_path):
 
         if ret:
             draw_main_locations(frame)
-            # bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_left_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
+            # bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_right_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
             #     frame, parabola_pts_list, parabola_coefficient)
 
             """--------------------------------画出每个rect的底部中点-------------------------"""
-            line = contents[frame_count]  # 获取每帧矩形坐标
+            try:
+                line = contents[frame_count]  # 获取每帧矩形坐标
+            except:
+                print("frame count different from rect count")
+                break
             # rect_coordinates_list = eval(line.split(";;;")[1])  # only for 141
             rect_coordinates_list = [[item[1], item[2], item[3], item[4]] for item in eval(line)]
             bed1_laptop_count_rect = 0
@@ -58,11 +64,11 @@ def start_processing(video_path, rect_path, output_path):
             bed3_patient_count_rect = 0
             bed4_patient_count_rect = 0
 
-            eq_left_count_rect = 0
             eq_right_count_rect = 0
+            eq_left_count_rect = 0
 
-            ecg_count_rect = 0
-            meds_count_rect = 0
+            # ecg_count_rect = 0
+            # meds_count_rect = 0
 
             phone_count_rect = 0
 
@@ -81,8 +87,8 @@ def start_processing(video_path, rect_path, output_path):
                 """如果bottom 矩形 2个点在 某区域内，则求交点，并获取 多边形面积，再与矩形做比较"""
 
                 # print("------------------")
-                if frame_count != 0 and frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
-
+                # if frame_count != 0 and frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
+                if frame_count != 0:
                     """判断bed1 laptop (965, 400) (942, 407)  用腰部点判断"""
                     """判断bed1 patient (1120, 450) (950, 450) (1035, 424) (1240, 539) (1200, 445) 用腰部点判断"""
                     # """判断bed1 monitor (1250, 440) 用腰部点判断"""
@@ -100,8 +106,8 @@ def start_processing(video_path, rect_path, output_path):
 
                     """判断ecg (671, 365) 用腰部点判断"""
                     """判断meds (724, 365) (766, 358) 用腰部点判断"""
-                    """判断eq left (399, 371) (435, 362) 用腰部点判断"""
-                    """判断eq right (119, 417) (167, 409) 用腰部点判断"""
+                    """判断eq right (399, 371) (435, 362) 用腰部点判断"""
+                    """判断eq left (119, 417) (167, 409) 用腰部点判断"""
 
 
 
@@ -140,43 +146,53 @@ def start_processing(video_path, rect_path, output_path):
                         bed4_laptop_count_rect += 1
                     elif result1 == "b4_pa":
                         bed4_patient_count_rect += 1
-                    elif result1 == "ecg":
-                        ecg_count_rect += 1
-                    elif result1 == "meds":
-                        meds_count_rect += 1
-                    elif result1 == "eq_left":
-                        eq_left_count_rect += 1
+                    # elif result1 == "ecg":
+                    #     ecg_count_rect += 1
+                    # elif result1 == "meds":
+                    #     meds_count_rect += 1
                     elif result1 == "eq_right":
                         eq_right_count_rect += 1
+                    elif result1 == "eq_left":
+                        eq_left_count_rect += 1
                     elif result1 == "phone":
                         phone_count_rect += 1
 
-            if frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
-                print("time:", frame_count // 40, "Near bed 1 laptop--------number_people", bed1_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 2 laptop--------number_people", bed2_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 3 laptop--------number_people", bed3_laptop_count_rect)
-                print("time:", frame_count // 40, "Near bed 4 laptop--------number_people", bed4_laptop_count_rect)
-                print("time:", frame_count // 40, "Near phone---------------number_people", phone_count_rect)
-                print("time:", frame_count // 40, "Near ECG-----------------number_people", ecg_count_rect)
-                print("time:", frame_count // 40, "Near meds----------------number_people", meds_count_rect)
+            # if frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
+            if frame_count != 0:
+                # print("time:", frame_count // 40, "Near bed 1 laptop--------number_people", bed1_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 2 laptop--------number_people", bed2_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 3 laptop--------number_people", bed3_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near bed 4 laptop--------number_people", bed4_laptop_count_rect)
+                # print("time:", frame_count // 40, "Near phone---------------number_people", phone_count_rect)
+                # print("time:", frame_count // 40, "Near ECG-----------------number_people", ecg_count_rect)
+                # print("time:", frame_count // 40, "Near meds----------------number_people", meds_count_rect)
 
-                print("time:", frame_count // 40, "Near bed 1 patient-------number_people", bed1_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 2 patient-------number_people", bed2_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 3 patient-------number_people", bed3_patient_count_rect)
-                print("time:", frame_count // 40, "Near bed 4 patient-------number_people", bed4_patient_count_rect)
-                print("time:", frame_count // 40, "Near eq left-------------number_people", eq_left_count_rect)
+                # print("time:", frame_count // 40, "Near bed 1 patient-------number_people", bed1_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 2 patient-------number_people", bed2_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 3 patient-------number_people", bed3_patient_count_rect)
+                # print("time:", frame_count // 40, "Near bed 4 patient-------number_people", bed4_patient_count_rect)
+                # print("time:", frame_count // 40, "Near eq right-------------number_people", eq_right_count_rect)
+                # print("time:", frame_count // 40, "Near eq left-------------number_people", eq_left_count_rect)
 
                 """----------------------------------判断在一起的人-------------------------------"""
                 # people_together_merge_result = merge_together_rect(people_together_pair_list)
                 # print("people together: ", people_together_pair_list, "---merged:", people_together_merge_result)
-                print("------------------------------------------------------------------------------------------")
+                # print("------------------------------------------------------------------------------------------")
 
                 # "time,bed1,bed2, bed3,bed4,bed1_lp, bed2_lp,bed3_lp,bed4_lp, eq_left,eq_right,ecg, meds,phone\n"
-                result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + str(bed2_patient_count_rect) + "," + \
-                                          str(bed3_patient_count_rect) + "," + str(bed4_patient_count_rect) + "," + str(bed1_laptop_count_rect) + "," + \
-                                          str(bed2_laptop_count_rect) + "," + str(bed3_laptop_count_rect) + "," + str(bed4_laptop_count_rect) + "," + \
-                                          str(eq_left_count_rect) + "," + str(eq_right_count_rect) + "," + str(ecg_count_rect) + "," + \
-                                          str(meds_count_rect) + "," + str(phone_count_rect) + "\n"
+
+                result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + \
+                                          str(bed2_patient_count_rect) + "," + str(bed3_patient_count_rect) + "," + \
+                                          str(bed4_patient_count_rect) + "," + str(bed1_laptop_count_rect) + "," + \
+                                          str(bed2_laptop_count_rect) + "," + str(bed3_laptop_count_rect) + "," + \
+                                          str(bed4_laptop_count_rect) + "," + str(eq_right_count_rect) + "," + \
+                                          str(eq_left_count_rect) + "," + str(phone_count_rect) + "\n"
+
+                # result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + str(bed2_patient_count_rect) + "," + \
+                #                           str(bed3_patient_count_rect) + "," + str(bed4_patient_count_rect) + "," + str(bed1_laptop_count_rect) + "," + \
+                #                           str(bed2_laptop_count_rect) + "," + str(bed3_laptop_count_rect) + "," + str(bed4_laptop_count_rect) + "," + \
+                #                           str(eq_right_count_rect) + "," + str(eq_left_count_rect) + "," + str(ecg_count_rect) + "," + \
+                #                           str(meds_count_rect) + "," + str(phone_count_rect) + "\n"
                 # if point_in_region(bottom_rect_center_point, bed3_laptop_pts_list):
                 #     cv2.putText(frame, "Using bed 3 laptop", (450, 660), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 50), 2)
 
@@ -238,11 +254,14 @@ def start_processing(video_path, rect_path, output_path):
 
 
 if __name__ == "__main__":
-    for i in range(141, 220):
-        video_path = "C:\\develop\\videos\\processed_videos\\processed_" + str(i) + "_h264.mp4"
-        rect_path = "process_tracking_box/tracking_box_data/track_" + str(i) + "_processed.txt"
-        output_path = "process_tracking_box/output_data/temporal_data_based_points_" + str(i) + ".csv"
-        if os.path.exists(video_path):
-            start_processing(video_path, rect_path, output_path)
-        else:
-            print("processed_" + str(i) + "_h264.mp4 not exist")
+    for i in range(141, 219):
+
+        if i > 140:
+            video_path = "C:\\develop\\videos\\processed_1_frame_videos\\processed_1_frame_" + str(i) + ".mp4"
+            rect_path = "process_tracking_box/tracking_box_data/track_" + str(i) + "_processed.txt"
+            output_path = "process_tracking_box/output_data/1_frame_temporal_data_based_points_" + str(i) + ".csv"
+            if os.path.exists(video_path):
+                print("processing.......................", i)
+                start_processing(video_path, rect_path, output_path)
+            else:
+                print("processed_1_frame_" + str(i) + ".mp4 not exist")

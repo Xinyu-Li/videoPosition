@@ -107,7 +107,7 @@ def merge_together_rect(pair_list):
     if len(pair_list) == 1:
         return [set(pair_list[0])]
     result = merge_together_rect_one_round(pair_list)
-    print(result)
+    # print(result)
     if len(result) == 1:
         return result
     final_result = merge_together_rect_one_round(result)
