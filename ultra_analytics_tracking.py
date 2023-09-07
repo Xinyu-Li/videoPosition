@@ -39,7 +39,7 @@ while cap.isOpened():
         # Run YOLOv8 tracking on the frame, persisting tracks between frames
         results = model.track(frame, persist=True)
 
-        rect_result_list.append(str(results[0].boxes.xywh) + "")  # can also use xyxy format
+        rect_result_list.append(str(results[0].boxes.xywh.tolist()) + "")  # can also use xyxy format
         # Visualize the results on the frame
         annotated_frame = results[0].plot()
 
