@@ -5,3 +5,4 @@ __pycache__/
 *.xlsx
 process_tracking_box/tracking_box_data
 process_tracking_box/output_data
+*.mp4

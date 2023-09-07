@@ -13,7 +13,7 @@ def build_mesh_file():
 
 
 def convert_fisheye_video(input_video_path, output_video_path):
-    DIM = (4071, 1296)  # 指定视频的宽度和高度
+    DIM = (4071, 1296)  # output video width and height
     # video_path = "D:/PythonProjects/sample.mp4"
 
     # 对每一帧进行处理
@@ -22,10 +22,10 @@ def convert_fisheye_video(input_video_path, output_video_path):
     out = cv2.VideoWriter(output_video_path, fourcc, 9, DIM)
 
     # Create a named window
-    cv2.namedWindow('YOLOv8 Tracking', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('fisheye_video', cv2.WINDOW_NORMAL)
 
     # Resize the window
-    cv2.resizeWindow('YOLOv8 Tracking', 1280, 960)
+    cv2.resizeWindow('fisheye_video', 1280, 960)
 
     frame_count = 0
     while (cap.isOpened()):
@@ -39,7 +39,7 @@ def convert_fisheye_video(input_video_path, output_video_path):
 
         undistorted_frame = frd.run_dewarp()
 
-        cv2.imshow("YOLOv8 Tracking", undistorted_frame)
+        cv2.imshow("fisheye_video", undistorted_frame)
         out.write(undistorted_frame)
 
         print(frame_count)

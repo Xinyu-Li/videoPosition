@@ -7,7 +7,7 @@ ffmpeg -i .\SampleVideoForSpatialPedagogyProject.avi -c:v libx264 sample.mp4
 -c:v libx264: use H.264
 output.mp4: output mp4 file
 
-2. run generate 1 frame video
+2. run generate 1 frame video (optional)
 
 3. convert fisheye video
 
