@@ -38,6 +38,7 @@ def analyse_video(input_video_path, output_video_path, output_rect_path):
             results = model.track(frame, persist=True)
 
             rect_result_list.append(str(results[0].boxes.xywh.tolist()) + "")  # can also use xyxy format
+            print(str(results[0].boxes.xywh.tolist()))
             # Visualize the results on the frame
             annotated_frame = results[0].plot()
 

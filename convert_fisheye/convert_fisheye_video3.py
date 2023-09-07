@@ -53,5 +53,5 @@ def convert_fisheye_video(input_video_path, output_video_path):
 # step 1, run build
 # build_mesh_file()
 
-# step 2, comment run build function
+# step 2, comment run build function, add input video and output video path
 convert_fisheye_video("../sample.mp4", "sample_fisheye_converted.mp4")
