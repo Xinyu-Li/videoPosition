@@ -20,7 +20,8 @@ from util_functions import *
 
 def start_processing(video_path, rect_path, output_path):
     # result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,eq_right,ecg,meds,phone\n"
-    result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,eq_left,,phone\n"
+    # result_temporal_string = "time,bed1,bed2,bed3,bed4,bed1_lp,bed2_lp,bed3_lp,bed4_lp,eq_right,eq_left,phone\n"
+    result_temporal_string = "time,bed1,bed2,bed3,bed4,eq_right,eq_left,phone,center_left,center_middle,center_right\n"
     cap = cv2.VideoCapture(video_path)
     # contents = get_rect_data("rect_result.txt")
     contents = get_rect_data(rect_path)
@@ -28,12 +29,26 @@ def start_processing(video_path, rect_path, output_path):
 
     wait_time = 1
 
-    target_waist_point_list_dict = {"b1_lp": [(965, 400), (942, 407)], "b1_pa": [(1120, 450), (950, 450), (1035, 424), (1240, 539), (1200, 445)],
-                                    "b2_lp": [(420, 420), (402, 421)], "b2_pa": [(200, 470), (417, 464), (325, 431), (69, 453)],
-                                    "b3_lp": [(565, 370), (574, 381)], "b3_pa": [(580, 345), (597, 394), (616, 361), (530, 392)],
-                                    "b4_lp": [(920, 365), (938, 374)], "b4_pa": [(870, 365), (840, 379), (895, 401), (889, 369)],
-                                    # "ecg": [(671, 365)], "meds": [(724, 415), (756, 442)],
-                                    "eq_right": [(399, 371), (435, 362)], "eq_left": [(119, 417), (167, 409)], "phone": [(1120, 360), (1120, 383)]}
+    target_waist_point_list_dict = {
+                                    # "b1_lp": [(965, 400), (942, 407)],
+                                    # "b1_pa": [(1120, 450), (950, 450), (1035, 424), (1240, 539), (1200, 445)],
+        "b1_pa": [(1120, 450)],
+                                    # "b2_lp": [(420, 420), (402, 421)],
+                                    # "b2_pa": [(200, 470), (417, 464), (325, 431), (69, 453)],
+        "b2_pa": [(200, 470)],
+                                    # "b3_lp": [(565, 370), (574, 381)],
+                                    # "b3_pa": [(580, 345), (597, 394), (616, 361), (530, 392)],
+        "b3_pa": [(580, 345)],
+                                    # "b4_lp": [(920, 365), (938, 374)],
+                                    # "b4_pa": [(870, 365), (840, 379), (895, 401), (889, 369)],
+        "b4_pa": [(870, 365)],
+                                    "ecg": [(671, 365)], "meds": [(724, 415), (756, 442)],
+                                    "eq_right": [(399, 371), (435, 362)], "eq_left": [(119, 417), (167, 409)], "phone": [(1120, 360), (1120, 383)],
+        "center_left": [(506, 490), (609, 498)],
+        "center_middle": [(721, 443), (730, 493)],
+        "center_right": [(851, 480), (954, 468)]
+                                    # "center": [(730, 493), (726, 471), (662, 497), (795, 485), (734, 514)]
+    }
 
     target_head_point_list_dict = {"b3_mo": [(570, 310)], "b3_ox": [(635, 310)], "b4_mo": [(830, 315)], "b4_ox": [(880, 320)], "phone": [(1120, 360), (1120, 383)]}
 
@@ -42,7 +57,8 @@ def start_processing(video_path, rect_path, output_path):
         milliseconds = cap.get(cv2.CAP_PROP_POS_MSEC)  # 获取每帧的时间戳
 
         if ret:
-            draw_main_locations(frame)
+            # draw_main_locations(frame)
+
             # bed1_laptop_pts_list, bed2_laptop_pts_list, bed3_laptop_pts_list, bed4_laptop_pts_list, bed3_and_ecg_pts_list, meds_pts_list, phone_pts_list, bed1_bed2_middle_line, bed3_eq_right_line, bed3_patient_line, bed4_patient_line = draw_main_areas(
             #     frame, parabola_pts_list, parabola_coefficient)
 
@@ -54,10 +70,10 @@ def start_processing(video_path, rect_path, output_path):
                 break
             # rect_coordinates_list = eval(line.split(";;;")[1])  # only for 141
             rect_coordinates_list = [[item[1], item[2], item[3], item[4]] for item in eval(line)]
-            bed1_laptop_count_rect = 0
-            bed2_laptop_count_rect = 0
-            bed3_laptop_count_rect = 0
-            bed4_laptop_count_rect = 0
+            # bed1_laptop_count_rect = 0
+            # bed2_laptop_count_rect = 0
+            # bed3_laptop_count_rect = 0
+            # bed4_laptop_count_rect = 0
 
             bed1_patient_count_rect = 0
             bed2_patient_count_rect = 0
@@ -71,16 +87,41 @@ def start_processing(video_path, rect_path, output_path):
             # meds_count_rect = 0
 
             phone_count_rect = 0
+            center_left_count_rect = 0
+            center_middle_count_rect = 0
+            center_right_count_rect = 0
 
             people_together_count_rect = 0
             people_together_pair_list = []
             # print("---------------each frame---------------------------")
+            # my_colors = ([51, 153, 255], [128, 128, 128], [51, 255, 51], [0, 0, 255] , [128, 128, 128], [128, 128, 128], [128, 128, 128])
+            # my_colors = ([255, 255, 102], [255, 102, 178], [0, 102, 204], [204, 153, 255], [102, 255, 255], [255, 0, 255] ,[255, 255, 102],[255, 255, 102],[255, 255, 102])
+            #              青               yellow 色               棕色          粉色            紫粉                紫色
+            my_colors = ([153, 255, 255], [204, 153, 255], [0, 204, 0], [102, 255, 255], [255, 255, 102], [128, 128, 128], [128, 128, 128], [128, 128, 128], [128, 128, 128])
+            #                 zise           hui              green             yellow          青
+            rect_count = 0
             for rect_coordinates in rect_coordinates_list:
+
                 # print(rect_coordinates)
                 head_area_center_point, waist_area_center_point, bottom_area_center_point = centers_for_rect_area(rect_coordinates)
-                cv2.circle(frame, head_area_center_point, 5, color=[0, 0, 255], thickness=-1)
-                cv2.circle(frame, waist_area_center_point, 5, color=[0, 0, 255], thickness=-1)
-                cv2.circle(frame, bottom_area_center_point, 5, color=[0, 0, 255], thickness=-1)
+                """visualize 头部 腰部 脚部 点"""
+                # cv2.circle(frame, head_area_center_point, 5, color=[0, 0, 255], thickness=-1)
+                # cv2.circle(frame, waist_area_center_point, 5, color=[0, 0, 255], thickness=-1)
+                # cv2.circle(frame, bottom_area_center_point, 5, color=[0, 0, 255], thickness=-1)
+                cv2.rectangle(frame,
+                              (int(rect_coordinates[0]), int(rect_coordinates[1])),
+                              (int(rect_coordinates[2]), int(rect_coordinates[1] + (rect_coordinates[3] - rect_coordinates[1]) * 0.15)),
+                              color=[0, 0, 0], thickness=-1)
+                cv2.rectangle(frame,
+                              (int(rect_coordinates[0]), int(rect_coordinates[1])), (int(rect_coordinates[2]), int(rect_coordinates[3])), color=my_colors[rect_count], thickness=2)  # orange
+                rect_count += 1
+                # cv2.rectangle(frame,
+                #               (), (), color=[0, 0, 255], thickness=3)   # red
+                # cv2.rectangle(frame,
+                #               (), (), color=[51, 255, 51], thickness=3)   # green
+                # cv2.rectangle(frame,
+                #               (), (), color=[128, 128, 128], thickness=3)
+
 
                 """如果bottom 矩形 3个点在 某区域内，则判定该人在该区域内"""
 
@@ -130,20 +171,20 @@ def start_processing(video_path, rect_path, output_path):
                     result1 = check_min_distance_to_points(waist_area_center_point, target_waist_point_list_dict)
                     # result2 = check_min_distance_to_points(head_area_center_point, target_head_point_list_dict)
 
-                    if result1 == "b1_lp":
-                        bed1_laptop_count_rect += 1
-                    elif result1 == "b1_pa":
+                    # if result1 == "b1_lp":
+                    #     bed1_laptop_count_rect += 1
+                    if result1 == "b1_pa":
                         bed1_patient_count_rect += 1
-                    elif result1 == "b2_lp":
-                        bed2_laptop_count_rect += 1
+                    # elif result1 == "b2_lp":
+                    #     bed2_laptop_count_rect += 1
                     elif result1 == "b2_pa":
                         bed2_patient_count_rect += 1
-                    elif result1 == "b3_lp":
-                        bed3_laptop_count_rect += 1
+                    # elif result1 == "b3_lp":
+                    #     bed3_laptop_count_rect += 1
                     elif result1 == "b3_pa":
                         bed3_patient_count_rect += 1
-                    elif result1 == "b4_lp":
-                        bed4_laptop_count_rect += 1
+                    # elif result1 == "b4_lp":
+                    #     bed4_laptop_count_rect += 1
                     elif result1 == "b4_pa":
                         bed4_patient_count_rect += 1
                     # elif result1 == "ecg":
@@ -156,6 +197,12 @@ def start_processing(video_path, rect_path, output_path):
                         eq_left_count_rect += 1
                     elif result1 == "phone":
                         phone_count_rect += 1
+                    elif result1 == "center_left":
+                        center_left_count_rect += 1
+                    elif result1 == "center_right":
+                        center_right_count_rect += 1
+                    elif result1 == "center_middle":
+                        center_middle_count_rect += 1
 
             # if frame_count % 40 == 0:  # 每40帧判断一次，检查了每个 矩形
             if frame_count != 0:
@@ -181,12 +228,16 @@ def start_processing(video_path, rect_path, output_path):
 
                 # "time,bed1,bed2, bed3,bed4,bed1_lp, bed2_lp,bed3_lp,bed4_lp, eq_left,eq_right,ecg, meds,phone\n"
 
-                result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + \
+                result_temporal_string += str(frame_count) + "," + str(bed1_patient_count_rect) + "," + \
                                           str(bed2_patient_count_rect) + "," + str(bed3_patient_count_rect) + "," + \
-                                          str(bed4_patient_count_rect) + "," + str(bed1_laptop_count_rect) + "," + \
-                                          str(bed2_laptop_count_rect) + "," + str(bed3_laptop_count_rect) + "," + \
-                                          str(bed4_laptop_count_rect) + "," + str(eq_right_count_rect) + "," + \
-                                          str(eq_left_count_rect) + "," + str(phone_count_rect) + "\n"
+                                          str(bed4_patient_count_rect) + "," + \
+                                          str(eq_right_count_rect) + "," + \
+                                          str(eq_left_count_rect) + "," + str(phone_count_rect) + "," + \
+                                          str(center_left_count_rect) + "," + str(center_middle_count_rect) + "," + str(center_right_count_rect) + "\n"
+        # str(bed1_laptop_count_rect) + "," + \
+        # str(bed2_laptop_count_rect) + "," + \
+        # str(bed3_laptop_count_rect) + "," + \
+        # str(bed4_laptop_count_rect) + "," + \
 
                 # result_temporal_string += str(frame_count // 40) + "," + str(bed1_patient_count_rect) + "," + str(bed2_patient_count_rect) + "," + \
                 #                           str(bed3_patient_count_rect) + "," + str(bed4_patient_count_rect) + "," + str(bed1_laptop_count_rect) + "," + \
@@ -227,6 +278,22 @@ def start_processing(video_path, rect_path, output_path):
             cv2.imshow('video', frame)
 
             frame_count += 1
+            # if frame_count == 1404:
+            #     cv2.waitKey(0)
+
+            # if frame_count == 1514:
+            #     cv2.waitKey(0)
+            # if frame_count == 1515:
+            #     cv2.waitKey(0)
+            # if frame_count == 1516:
+            #     cv2.waitKey(0)
+            if frame_count == 1517:
+                cv2.waitKey(0)
+            if frame_count == 1518:
+                cv2.waitKey(0)
+            if frame_count == 1519:
+                cv2.waitKey(0)
+
 
         key = cv2.waitKey(wait_time)
         if key == 27:  # Esc exit
@@ -249,8 +316,8 @@ def start_processing(video_path, rect_path, output_path):
 
     cv2.destroyAllWindows()
     cap.release()
-    with open(output_path, "w", encoding="utf8") as f:
-        f.write(result_temporal_string)
+    # with open(output_path, "w", encoding="utf8") as f:
+    #     f.write(result_temporal_string)
 
 
 if __name__ == "__main__":

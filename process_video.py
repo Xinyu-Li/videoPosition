@@ -459,8 +459,8 @@ def start_processing(video_path, rect_path, output_path):
 
     cv2.destroyAllWindows()
     cap.release()
-    with open(output_path, "w", encoding="utf8") as f:
-        f.write(result_temporal_string)
+    # with open(output_path, "w", encoding="utf8") as f:
+    #     f.write(result_temporal_string)
 
 
 if __name__ == "__main__":

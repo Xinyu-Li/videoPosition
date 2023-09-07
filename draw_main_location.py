@@ -13,8 +13,11 @@ def draw_main_locations(frame):
     # Floor plan, 7057, 9464  # 整个场地大小，长和宽
 
     # Phone, 2886, 9283
-    cv2.putText(frame, "phone", (1100, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-    cv2.circle(frame, (1120, 360), 5, color=[0, 255, 255], thickness=-1)
+    cv2.putText(frame, "Phone (primary)", (1050, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+    for phone_point in [(1120, 360), (1120, 383)]:
+        cv2.circle(frame, phone_point, 5, color=[0, 255, 255], thickness=-1)
+        break
+
     # ECG, 6542, 5988
     # cv2.putText(frame, "ECG", (671, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
     # cv2.circle(frame, (671, 365), 5, color=[0, 255, 255], thickness=-1)
@@ -24,69 +27,84 @@ def draw_main_locations(frame):
 
     """---------------------------------------------------------------------------------------------------"""
     # B1 laptop, 4564, 7589
-    cv2.putText(frame, "B1 lp", (965, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (159, 255, 84), 2)
-    cv2.circle(frame, (965, 400), 5, color=[159, 255, 84], thickness=-1)
+    # cv2.putText(frame, "B1 lp", (965, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (159, 255, 84), 2)
+    # cv2.circle(frame, (965, 400), 5, color=[159, 255, 84], thickness=-1)
     # B1 centre, 5496, 7589
     # B1 monitor, 6820, 6820
-    cv2.putText(frame, "B1 mo", (1210, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (159, 255, 84), 2)
-    cv2.circle(frame, (1250, 440), 5, color=[159, 255, 84], thickness=-1)
+    # cv2.putText(frame, "B1 mo", (1210, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (159, 255, 84), 2)
+    # cv2.circle(frame, (1250, 440), 5, color=[159, 255, 84], thickness=-1)
     # B1 oxygen, 6781, 8336
     """cannot see"""
     # B1 patient, 5911, 7589
-    cv2.putText(frame, "B1 pa", (1120, 430), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (159, 255, 84), 2)
-    cv2.circle(frame, (1120, 450), 5, color=[159, 255, 84], thickness=-1)
+    cv2.putText(frame, "Bed 1 (secondary)", (1030, 430), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (159, 255, 84), 2)
+    for b1_pa_point in [(1120, 450), (950, 450), (1035, 424), (1240, 539), (1200, 445)]:
+        cv2.circle(frame, b1_pa_point, 5, color=[159, 255, 84], thickness=-1)
+        break
 
     """---------------------------------------------------------------------------------------------------"""
     # B2 laptop, 2478, 6581
-    cv2.putText(frame, "B2 lp", (420, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
-    cv2.circle(frame, (420, 420), 5, color=[240, 32, 160], thickness=-1)
+    # cv2.putText(frame, "B2 lp", (420, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
+    # cv2.circle(frame, (420, 420), 5, color=[240, 32, 160], thickness=-1)
     # B2 centre, 1547, 6581
     # B2 monitor, 223, 5834
-    cv2.putText(frame, "B2 mo", (80, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
-    cv2.circle(frame, (80, 400), 5, color=[240, 32, 160], thickness=-1)
+    # cv2.putText(frame, "B2 mo", (80, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
+    # cv2.circle(frame, (80, 400), 5, color=[240, 32, 160], thickness=-1)
     # B2 oxygen, 292, 7358
-    cv2.putText(frame, "B2 ox", (10, 310), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
-    cv2.circle(frame, (10, 330), 5, color=[240, 32, 160], thickness=-1)
+    # cv2.putText(frame, "B2 ox", (10, 310), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
+    # cv2.circle(frame, (10, 330), 5, color=[240, 32, 160], thickness=-1)
     # B2 patient, 1124, 6581
-    cv2.putText(frame, "B2 pa", (200, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (240, 32, 160), 2)
-    cv2.circle(frame, (200, 470), 5, color=[240, 32, 160], thickness=-1)
+    cv2.putText(frame, "Bed 2 (secondary)", (150, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (240, 32, 160), 2)
+    for b2_pa_point in [(200, 470), (417, 464), (325, 431), (69, 453)]:
+        cv2.circle(frame, b2_pa_point, 5, color=[240, 32, 160], thickness=-1)
+        break
 
     """---------------------------------------------------------------------------------------------------"""
     # B3 laptop, 4564, 3156
-    cv2.putText(frame, "B3 lp", (560, 360), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
-    cv2.circle(frame, (565, 370), 5, color=[255, 118, 72], thickness=-1)
+    # cv2.putText(frame, "B3 lp", (560, 360), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
+    # cv2.circle(frame, (565, 370), 5, color=[255, 118, 72], thickness=-1)
     # B3 centre, 5480, 3156
     # B3 monitor, 6827, 2371
-    cv2.putText(frame, "B3 mo", (550, 290), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
-    cv2.circle(frame, (570, 310), 5, color=[255, 118, 72], thickness=-1)
+    # cv2.putText(frame, "B3 mo", (550, 290), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
+    # cv2.circle(frame, (570, 310), 5, color=[255, 118, 72], thickness=-1)
     # B3 oxygen, 6827, 3895
-    cv2.putText(frame, "B3 ox", (635, 290), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
-    cv2.circle(frame, (635, 310), 5, color=[255, 118, 72], thickness=-1)
+    # cv2.putText(frame, "B3 ox", (635, 290), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
+    # cv2.circle(frame, (635, 310), 5, color=[255, 118, 72], thickness=-1)
     # B3 patient, 5911, 3156
-    cv2.putText(frame, "B3 pa", (580, 335), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 118, 72), 2)
-    cv2.circle(frame, (580, 345), 5, color=[255, 118, 72], thickness=-1)
+    cv2.putText(frame, "Bed 3 (distraction)", (530, 365), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 118, 72), 2)
+    for b3_pa_point in [(580, 375), (597, 394), (616, 361), (530, 392)]:
+        cv2.circle(frame, b3_pa_point, 5, color=[255, 118, 72], thickness=-1)
+        break
 
     """---------------------------------------------------------------------------------------------------"""
     # B4 laptop, 2478, 2802
-    cv2.putText(frame, "B4 lp", (920, 345), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
-    cv2.circle(frame, (920, 365), 5, color=[255, 187, 255], thickness=-1)
+    # cv2.putText(frame, "B4 lp", (920, 345), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
+    # cv2.circle(frame, (920, 365), 5, color=[255, 187, 255], thickness=-1)
     # B4 centre, 1539, 2802
     # B4 monitor, 223, 2047
-    cv2.putText(frame, "B4 mo", (810, 295), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
-    cv2.circle(frame, (830, 315), 5, color=[255, 187, 255], thickness=-1)
+    # cv2.putText(frame, "B4 mo", (810, 295), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
+    # cv2.circle(frame, (830, 315), 5, color=[255, 187, 255], thickness=-1)
     # B4 oxygen, 285, 3541
-    cv2.putText(frame, "B4 ox", (880, 300), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
-    cv2.circle(frame, (880, 320), 5, color=[255, 187, 255], thickness=-1)
+    # cv2.putText(frame, "B4 ox", (880, 300), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
+    # cv2.circle(frame, (880, 320), 5, color=[255, 187, 255], thickness=-1)
     # B4 patient, 1293, 2802
-    cv2.putText(frame, "B4 pa", (850, 345), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 187, 255), 2)
-    cv2.circle(frame, (870, 365), 5, color=[255, 187, 255], thickness=-1)
+    cv2.putText(frame, "Bed 4 (primary)", (800, 345), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 187, 255), 2)
+    for b4_pa_point in [(870, 365), (840, 379), (895, 401), (889, 369)]:
+        cv2.circle(frame, b4_pa_point, 5, color=[255, 187, 255], thickness=-1)
+        break
 
     # Equip right, 1155, 292
-    cv2.putText(frame, "Eq right", (410, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
-    cv2.circle(frame, (410, 350), 5, color=[255, 255, 50], thickness=-1)
+    cv2.putText(frame, "IV Station 2 (secondary)", (330, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 50), 2)
+    cv2.circle(frame, (410, 352), 5, color=[255, 255, 50], thickness=-1)
+    # for eq_right_point in [(399, 371), (435, 362)]:
+    #     cv2.circle(frame, eq_right_point, 5, color=[255, 255, 50], thickness=-1)
     # Equip left, 5819, 292
-    cv2.putText(frame, "Eq left", (130, 365), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 50), 2)
-    cv2.circle(frame, (130, 385), 5, color=[255, 255, 50], thickness=-1)
+    cv2.putText(frame, "IV Station 1 (secondary)", (50, 365), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 50), 2)
+    cv2.circle(frame, (142, 391), 5, color=[255, 255, 50], thickness=-1)
+    # for eq_left_point in [(119, 417), (167, 409)]:
+    #     cv2.circle(frame, eq_left_point, 5, color=[255, 255, 50], thickness=-1)
+
+    cv2.putText(frame, "Center", (710, 470), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (60, 20, 220), 2)
+    cv2.circle(frame, (730, 493), 5, color=[60, 20, 220], thickness=-1)
 
     """---------------------------------------------------------------------------"""
 
