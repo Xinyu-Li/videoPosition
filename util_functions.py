@@ -2,7 +2,7 @@ import math
 
 import cv2
 import numpy as np
-from convex_polygon_intersection import _sort_vertices_anti_clockwise_and_remove_duplicates, intersect
+from backup.convex_polygon_intersection import _sort_vertices_anti_clockwise_and_remove_duplicates, intersect
 
 
 def millisecond_to_time(milliseconds):
