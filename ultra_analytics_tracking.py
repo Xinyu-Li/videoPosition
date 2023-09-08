@@ -21,7 +21,7 @@ def analyse_video(input_video_path, output_video_path, output_rect_path):
     cv2.namedWindow('YOLOv8 Tracking', cv2.WINDOW_NORMAL)
 
     # Resize the window
-    cv2.resizeWindow('YOLOv8 Tracking', 1280, 960)
+    cv2.resizeWindow('YOLOv8 Tracking', 2040, 650)
 
     frame_count = 0
     rect_result_list = []
