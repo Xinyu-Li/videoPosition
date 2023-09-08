@@ -1,7 +1,7 @@
 import pickle
 import cv2
 import numpy as np
-from fisheyewarping import FisheyeWarping # code has bugs, need to fix load_dewarp_mesh() method
+from fisheyewarping import FisheyeWarping  # code has bugs, need to fix load_dewarp_mesh() method
 
 
 def build_mesh_file():
@@ -25,7 +25,7 @@ def convert_fisheye_video(input_video_path, output_video_path):
     cv2.namedWindow('fisheye_video', cv2.WINDOW_NORMAL)
 
     # Resize the window
-    cv2.resizeWindow('fisheye_video', 1280, 960)
+    cv2.resizeWindow('fisheye_video', 2040, 650)
 
     frame_count = 0
     while (cap.isOpened()):
