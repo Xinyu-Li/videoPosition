@@ -42,7 +42,7 @@ def convert_fisheye_video(input_video_path, output_video_path):
         cv2.imshow("fisheye_video", undistorted_frame)
         out.write(undistorted_frame)
 
-        print(frame_count)
+        print("{}/{}".format(frame_count, cap.get(cv2.CAP_PROP_FRAME_COUNT)))
         # Break the loop if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
